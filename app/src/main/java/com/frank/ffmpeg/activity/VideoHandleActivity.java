@@ -11,14 +11,16 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.ProgressBar;
+
 import com.frank.ffmpeg.FFmpegCmd;
 import com.frank.ffmpeg.R;
 import com.frank.ffmpeg.format.VideoLayout;
 import com.frank.ffmpeg.util.FFmpegUtil;
 import com.frank.ffmpeg.util.FileUtil;
+
 import java.io.File;
 
-public class VideoHandleActivity extends AppCompatActivity implements View.OnClickListener{
+public class VideoHandleActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = VideoHandleActivity.class.getSimpleName();
     private static final int MSG_BEGIN = 101;
@@ -30,11 +32,11 @@ public class VideoHandleActivity extends AppCompatActivity implements View.OnCli
     private ProgressBar progress_video;
 
     @SuppressLint("HandlerLeak")
-    private Handler mHandler = new Handler(){
+    private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            switch (msg.what){
+            switch (msg.what) {
                 case MSG_BEGIN:
                     progress_video.setVisibility(View.VISIBLE);
                     setGone();
@@ -53,7 +55,7 @@ public class VideoHandleActivity extends AppCompatActivity implements View.OnCli
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        if (getSupportActionBar() != null){
+        if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
         setContentView(R.layout.activity_video_handle);
@@ -62,7 +64,7 @@ public class VideoHandleActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void intView() {
-        progress_video = (ProgressBar)findViewById(R.id.progress_video);
+        progress_video = (ProgressBar) findViewById(R.id.progress_video);
         findViewById(R.id.btn_video_transform).setOnClickListener(this);
         findViewById(R.id.btn_video_cut).setOnClickListener(this);
         findViewById(R.id.btn_video_concat).setOnClickListener(this);
@@ -116,7 +118,7 @@ public class VideoHandleActivity extends AppCompatActivity implements View.OnCli
     @Override
     public void onClick(View v) {
         int handleType;
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.btn_video_transform:
                 handleType = 0;
                 break;
@@ -168,20 +170,21 @@ public class VideoHandleActivity extends AppCompatActivity implements View.OnCli
 
     /**
      * 调用ffmpeg处理视频
+     *
      * @param handleType handleType
      */
-    private void doHandleVideo(int handleType){
+    private void doHandleVideo(int handleType) {
         String[] commandLine = null;
-        switch (handleType){
+        switch (handleType) {
             case 0://视频转码:mp4转flv、wmv, 或者flv、wmv转Mp4
-                if (!FileUtil.checkFileExist(srcFile)){
+                if (!FileUtil.checkFileExist(srcFile)) {
                     return;
                 }
                 String transformVideo = PATH + File.separator + "transformVideo.flv";
                 commandLine = FFmpegUtil.transformVideo(srcFile, transformVideo);
                 break;
             case 1://视频剪切
-                if (!FileUtil.checkFileExist(srcFile)){
+                if (!FileUtil.checkFileExist(srcFile)) {
                     return;
                 }
                 String cutVideo = PATH + File.separator + "cutVideo.mp4";
@@ -209,7 +212,7 @@ public class VideoHandleActivity extends AppCompatActivity implements View.OnCli
 //                commandLine = FFmpegUtil.concatVideo(srcFile, concatFile.getAbsolutePath(), concatVideo);
                 break;
             case 3://视频截图
-                if (!FileUtil.checkFileExist(srcFile)){
+                if (!FileUtil.checkFileExist(srcFile)) {
                     return;
                 }
                 String screenShot = PATH + File.separator + "screenShot.jpg";
@@ -217,7 +220,7 @@ public class VideoHandleActivity extends AppCompatActivity implements View.OnCli
                 commandLine = FFmpegUtil.screenShot(srcFile, size, screenShot);
                 break;
             case 4://视频添加水印
-                if (!FileUtil.checkFileExist(appendVideo)){
+                if (!FileUtil.checkFileExist(appendVideo)) {
                     return;
                 }
                 //1、图片
@@ -233,7 +236,7 @@ public class VideoHandleActivity extends AppCompatActivity implements View.OnCli
 //                commandLine = FFmpegUtil.addWaterMark(appendVideo, textPath, textMark);
                 break;
             case 5://视频转成gif
-                if (!FileUtil.checkFileExist(srcFile)){
+                if (!FileUtil.checkFileExist(srcFile)) {
                     return;
                 }
                 String Video2Gif = PATH + File.separator + "Video2Gif.gif";
@@ -250,7 +253,7 @@ public class VideoHandleActivity extends AppCompatActivity implements View.OnCli
             case 7://图片合成视频
                 //图片所在路径，图片命名格式img+number.jpg
                 String picturePath = PATH + File.separator + "img/";
-                if (!FileUtil.checkFileExist(picturePath)){
+                if (!FileUtil.checkFileExist(picturePath)) {
                     return;
                 }
                 String combineVideo = PATH + File.separator + "combineVideo.mp4";
@@ -263,33 +266,33 @@ public class VideoHandleActivity extends AppCompatActivity implements View.OnCli
                 String input1 = PATH + File.separator + "input1.mp4";
                 String input2 = PATH + File.separator + "input2.mp4";
                 String outputFile = PATH + File.separator + "multi.mp4";
-                if (!FileUtil.checkFileExist(input1) || !FileUtil.checkFileExist(input2)){
+                if (!FileUtil.checkFileExist(input1) || !FileUtil.checkFileExist(input2)) {
                     return;
                 }
                 commandLine = FFmpegUtil.multiVideo(input1, input2, outputFile, VideoLayout.LAYOUT_HORIZONTAL);
                 break;
             case 10://视频反序倒播
                 String output = PATH + File.separator + "reverse.mp4";
-                if (!FileUtil.checkFileExist(srcFile)){
+                if (!FileUtil.checkFileExist(srcFile)) {
                     return;
                 }
                 commandLine = FFmpegUtil.reverseVideo(srcFile, output);
                 break;
             case 11://视频降噪
                 String denoise = PATH + File.separator + "denoise.mp4";
-                if (!FileUtil.checkFileExist(srcFile)){
+                if (!FileUtil.checkFileExist(srcFile)) {
                     return;
                 }
                 commandLine = FFmpegUtil.denoiseVideo(srcFile, denoise);
                 break;
             case 12://视频转图片
                 String srcFile = PATH + File.separator + "beyond.mp4";
-                if (!FileUtil.checkFileExist(srcFile)){
+                if (!FileUtil.checkFileExist(srcFile)) {
                     return;
                 }
                 String imagePath = PATH + File.separator + "Video2Image/";//图片保存路径
                 File imageFile = new File(imagePath);
-                if (!imageFile.exists()){
+                if (!imageFile.exists()) {
                     imageFile.mkdir();
                 }
                 int mStartTime = 10;//开始时间
@@ -300,7 +303,7 @@ public class VideoHandleActivity extends AppCompatActivity implements View.OnCli
             case 13://两个视频合成画中画
                 String inputFile1 = PATH + File.separator + "beyond.mp4";
                 String inputFile2 = PATH + File.separator + "small_girl.mp4";
-                if (!FileUtil.checkFileExist(inputFile1) && !FileUtil.checkFileExist(inputFile2)){
+                if (!FileUtil.checkFileExist(inputFile1) && !FileUtil.checkFileExist(inputFile2)) {
                     return;
                 }
                 //x、y坐标点需要根据全屏视频与小视频大小，进行计算
@@ -313,15 +316,21 @@ public class VideoHandleActivity extends AppCompatActivity implements View.OnCli
             default:
                 break;
         }
+        if (commandLine!=null&&commandLine.length>0) {
+            for (String aCommandLine : commandLine) {
+                Log.e("lzf_commandLine", aCommandLine);
+            }
+        }
         executeFFmpegCmd(commandLine);
     }
 
     /**
      * 执行ffmpeg命令行
+     *
      * @param commandLine commandLine
      */
-    private void executeFFmpegCmd(final String[] commandLine){
-        if(commandLine == null){
+    private void executeFFmpegCmd(final String[] commandLine) {
+        if (commandLine == null) {
             return;
         }
         FFmpegCmd.execute(commandLine, new FFmpegCmd.OnHandleListener() {
